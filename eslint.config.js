@@ -16,10 +16,12 @@ export default tseslint
         ecmaVersion: 2020,
         globals: globals.browser,
       },
+      parser: "@typescript-eslint/parser",
       plugins: {
         "react-hooks": reactHooks,
         "react-refresh": reactRefresh,
         import: importPlugin,
+        "@typescript-eslint": tseslint,
       },
       rules: {
         ...reactHooks.configs.recommended.rules,
@@ -33,6 +35,14 @@ export default tseslint
           { vars: "all", args: "after-used", ignoreRestSiblings: true },
         ],
         "import/no-unused-modules": ["warn", { unusedExports: true }],
+        "@typescript-eslint/no-unused-vars": [
+          "off",
+          {
+            vars: "all",
+            args: "after-used",
+            ignoreRestSiblings: true,
+          },
+        ],
       },
     }
   )

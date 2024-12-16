@@ -1,9 +1,20 @@
-import { useState } from "react";
+import Home from "./Home/Home";
+import Layout from "./Layout/Layout";
+import Countries from "./Countries/Countries";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
-  const [count, setCount] = useState(0);
 
-  return <>sample text</>;
+  return (
+    <Router>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/all-countries" element={<Countries />} />
+        </Routes>
+      </Layout>
+    </Router>
+  )
 }
 
 export default App;
