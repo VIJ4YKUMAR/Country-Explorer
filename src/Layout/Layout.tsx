@@ -3,6 +3,8 @@ import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import countryExplorer from "../assets/country-explorer.png";
 
+import ScrollToTopButton from "../Components/ScrollToTopButton";
+
 interface LayoutProps {
   children: ReactNode;
 }
@@ -111,6 +113,7 @@ const Layout = ({ children }: LayoutProps) => {
           />
         </div>
         <main className="relative z-10 mt-32 p-4">{children}</main>
+        <ScrollToTopButton />
         <div
           aria-hidden="true"
           className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
