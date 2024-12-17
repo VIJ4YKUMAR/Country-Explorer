@@ -1,4 +1,4 @@
-type Country = {
+export type Country = {
   name: {
     common: string;
     official: string;
@@ -72,4 +72,11 @@ type Country = {
   };
 };
 
-export default Country;
+type CountryCardType = {
+  data?: Country;
+  isFavorite: boolean;
+  onAddToFavorites: (country: Country) => void;
+  onRemoveFromFavorites: (country: Country) => void;
+};
+
+export default CountryCardType;

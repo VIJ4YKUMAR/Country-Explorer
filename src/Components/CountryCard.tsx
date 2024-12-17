@@ -1,7 +1,10 @@
-import Country from "../types/countryCardType";
+import CountryCardType from "../types/countryCardType";
 import { Link } from "react-router-dom";
 
-const CountryCard = ({ data }: { data?: Country }) => {
+const CountryCard = (countryCardProps?: CountryCardType) => {
+  const { data, isFavorite, onAddToFavorites, onRemoveFromFavorites } =
+    countryCardProps || {};
+
   const { name, flags, capital, region, languages } = data || {};
 
   const spokenLanguages = Object.values(languages || {});
@@ -11,6 +14,9 @@ const CountryCard = ({ data }: { data?: Country }) => {
   const handleFavoriteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
+    if (data) {
+      isFavorite ? onRemoveFromFavorites?.(data) : onAddToFavorites?.(data);
+    }
   };
 
   return (
@@ -29,10 +35,13 @@ const CountryCard = ({ data }: { data?: Country }) => {
           <p>Region: {region}</p>
           <p>Language:{spokenLanguages[0]}</p>
         </div>
-        <button className="self-end" onClick={handleFavoriteClick}>
+        <button
+          className={`self-end ${isFavorite ? "text-red-500" : "text-gray-500"}`}
+          onClick={handleFavoriteClick}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            fill="none"
+            fill={isFavorite ? "currentColor" : "none"}
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
