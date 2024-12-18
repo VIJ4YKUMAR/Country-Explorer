@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import CountryCard from "../Components/CountryCard";
 import { Country } from "../types/countryCardType";
 import { useQuery } from "@tanstack/react-query";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../Store/Store";
+import { setCountries } from "./countrySlice";
 
 const API_URL = "https://restcountries.com/v3.1/all";
 
 const Countries = () => {
   const [visibleCount, setVisibleCount] = useState(51);
-  const [favorites, setFavorites] = useState<Country[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
+
   const increment = 30;
 
   const handleShowMore = () => {
@@ -23,8 +27,6 @@ const Countries = () => {
   };
 
   const {
-    isError,
-    error,
     isLoading,
     data: allCountries = [],
   } = useQuery<Country[], Error>({
@@ -36,31 +38,13 @@ const Countries = () => {
   });
 
   useEffect(() => {
-    const storedFavorites = localStorage.getItem("favorites");
-    if (storedFavorites) {
-      setFavorites(JSON.parse(storedFavorites));
+    if (allCountries.length > 0) {
+      dispatch(setCountries(allCountries));
     }
-  }, []);
+  }, [allCountries, dispatch]);
 
-  const handleAddToFavorites = (country: Country) => {
-    if (
-      !favorites.some(
-        (favorite) => favorite.name.common === country.name.common
-      )
-    ) {
-      const updatedFavorites = [...favorites, country];
-      setFavorites(updatedFavorites);
-      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-    }
-  };
-
-  const handleRemoveFromFavorites = (country: Country) => {
-    const updatedFavorites = favorites.filter(
-      (favorite) => favorite.name.common !== country.name.common
-    );
-    setFavorites(updatedFavorites);
-    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-  };
+  const countries = useSelector((state: RootState) => state.countries.countries);
+  const favorites = useSelector((state: RootState) => state.countries.favorites);
 
   return isLoading ? (
     <div className="flex justify-center items-center h-screen">
@@ -75,8 +59,8 @@ const Countries = () => {
         <p className="font-extralight text-center text-3xl">All Countries</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10">
-        {allCountries.length > 0 ? (
-          allCountries
+        {countries.length > 0 ? (
+          countries
             .slice(0, visibleCount)
             .map((country) => (
               <CountryCard
@@ -84,8 +68,6 @@ const Countries = () => {
                 isFavorite={favorites.some(
                   (fav) => fav.name.common === country.name.common
                 )}
-                onAddToFavorites={handleAddToFavorites}
-                onRemoveFromFavorites={handleRemoveFromFavorites}
                 data={country}
               />
             ))
@@ -93,7 +75,7 @@ const Countries = () => {
           <div>No countries found</div>
         )}
       </div>
-      {visibleCount < allCountries?.length && (
+      {visibleCount < countries?.length && (
         <div className="flex flex-col items-center justify-center mt-10">
           <button
             onClick={handleShowMore}

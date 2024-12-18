@@ -4,20 +4,15 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import countryExplorer from "../assets/country-explorer.png";
 
 import ScrollToTopButton from "../Components/ScrollToTopButton";
+import { Link } from "react-router-dom";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-const navigation = [
-  { name: "Product", href: "#" },
-  { name: "Features", href: "#" },
-  { name: "Marketplace", href: "#" },
-  { name: "Company", href: "#" },
-];
+const navigation = [{ name: "Favorites", href: "/favorites", key: 1 }];
 
 const Layout = ({ children }: LayoutProps) => {
-
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -46,13 +41,12 @@ const Layout = ({ children }: LayoutProps) => {
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="text-sm/6 font-semibold text-gray-900"
-              >
-                {item.name}
-              </a>
+              <Link key={item.key} to="/favorites">
+                {" "}
+                <p className="text-sm/6 font-semibold text-gray-900">
+                  {item.name}
+                </p>
+              </Link>
             ))}
           </div>
         </nav>
@@ -66,11 +60,7 @@ const Layout = ({ children }: LayoutProps) => {
             <div className="flex items-center justify-between">
               <a href="#" className="-m-1.5 p-1.5">
                 <span className="sr-only">Country Explorer</span>
-                <img
-                  alt=""
-                  src={countryExplorer}
-                  className="h-8 w-auto"
-                />
+                <img alt="" src={countryExplorer} className="h-8 w-auto" />
               </a>
               <button
                 type="button"
@@ -85,13 +75,12 @@ const Layout = ({ children }: LayoutProps) => {
               <div className="-my-6 divide-y divide-gray-500/10">
                 <div className="space-y-2 py-6">
                   {navigation.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                    >
-                      {item.name}
-                    </a>
+                    <Link key={item.key + 1} to="/favorites">
+                      {" "}
+                      <p className="text-sm/6 font-semibold text-gray-900">
+                        {item.name}
+                      </p>
+                    </Link>
                   ))}
                 </div>
               </div>
@@ -128,7 +117,7 @@ const Layout = ({ children }: LayoutProps) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Layout;

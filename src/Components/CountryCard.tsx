@@ -1,39 +1,60 @@
-import CountryCardType from "../types/countryCardType";
 import { Link } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { addToFavorites, removeFromFavorites } from "../Countries/countrySlice";
+import CountryCardType from "../types/countryCardType";
+import { RootState } from "../Store/Store";
+
+const MAX_FAVORITE_LIMIT = 5;
 
 const CountryCard = (countryCardProps?: CountryCardType) => {
-  const { data, isFavorite, onAddToFavorites, onRemoveFromFavorites } =
-    countryCardProps || {};
+  const dispatch = useDispatch();
+  const favorites = useSelector((state: RootState) => state.countries.favorites);
 
+  const { data } = countryCardProps || {};
   const { name, flags, capital, region, languages } = data || {};
-
   const spokenLanguages = Object.values(languages || {});
-
   const countryCapital = Object.values(capital || []);
+
+  const isFavorite = favorites.some((fav) => fav.name.common === data?.name.common);
 
   const handleFavoriteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
+
+    if (favorites?.length === MAX_FAVORITE_LIMIT) {
+      return toast.error("maximum limit reached", {
+        duration: 2000,
+        position: "bottom-center",
+        style: { background: "white" }
+      })
+    }
+
     if (data) {
-      isFavorite ? onRemoveFromFavorites?.(data) : onAddToFavorites?.(data);
+      if (isFavorite) {
+        dispatch(removeFromFavorites(data));
+      } else {
+        dispatch(addToFavorites(data));
+      }
     }
   };
 
   return (
     <Link to={`/${name?.common}`}>
-      <div className="flex items-center space-x-8 rounded-lg border-white/40 p-2 bg-white/30 backdrop-blur-md shadow-md hover:shadow-lg">
+      <div className="flex items-center justify-around space-x-8 rounded-lg border-white/40 p-2 bg-white/30 backdrop-blur-md shadow-md hover:shadow-lg">
         <div className="w-1/3 shadow-md rounded-lg">
           <img
             className="rounded-lg w-full h-auto sm:max-h-24 object-cover"
             src={flags?.svg}
-            alt="flag"
+            alt={`${name?.common} flag`}
           />
         </div>
+
         <div className="font-mono">
-          <p>{name?.common}</p>
-          <p>Capital: {countryCapital[0]}</p>
-          <p>Region: {region}</p>
-          <p>Language:{spokenLanguages[0]}</p>
+          <p className="font-semibold">{name?.common}</p>
+          <p>Capital: {countryCapital[0] || "N/A"}</p>
+          <p>Region: {region || "N/A"}</p>
+          <p>Language: {spokenLanguages[0] || "N/A"}</p>
         </div>
         <button
           className={`self-end ${isFavorite ? "text-red-500" : "text-gray-500"}`}
@@ -55,6 +76,7 @@ const CountryCard = (countryCardProps?: CountryCardType) => {
           </svg>
         </button>
       </div>
+      <Toaster />
     </Link>
   );
 };

@@ -74,9 +74,10 @@ export type Country = {
 
 type CountryCardType = {
   data?: Country;
-  isFavorite: boolean;
-  onAddToFavorites: (country: Country) => void;
-  onRemoveFromFavorites: (country: Country) => void;
+  isFavorite?: boolean;
+  onAddToFavorites?: (country: Country) => void;
+  onRemoveFromFavorites?: (country: Country) => void;
+  favorites?: Country[];
 };
 
 export default CountryCardType;
