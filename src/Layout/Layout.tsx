@@ -10,7 +10,7 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-const navigation = [{ name: "Favorites", href: "/favorites", key: 1 }];
+const navigation = [{ name: "Favorites", href: "/favorite-countries", key: 1 }];
 
 const Layout = ({ children }: LayoutProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -41,7 +41,7 @@ const Layout = ({ children }: LayoutProps) => {
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
-              <Link key={item.key} to="/favorites">
+              <Link key={item.key} to="/favorite-countries">
                 {" "}
                 <p className="text-sm/6 font-semibold text-gray-900">
                   {item.name}
@@ -75,7 +75,11 @@ const Layout = ({ children }: LayoutProps) => {
               <div className="-my-6 divide-y divide-gray-500/10">
                 <div className="space-y-2 py-6">
                   {navigation.map((item) => (
-                    <Link key={item.key + 1} to="/favorites">
+                    <Link
+                      key={item.key}
+                      to="/favorite-countries"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
                       {" "}
                       <p className="text-sm/6 font-semibold text-gray-900">
                         {item.name}

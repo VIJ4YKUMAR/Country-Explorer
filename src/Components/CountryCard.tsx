@@ -22,27 +22,26 @@ const CountryCard = (countryCardProps?: CountryCardType) => {
     e.stopPropagation();
     e.preventDefault();
 
-    if (favorites?.length === MAX_FAVORITE_LIMIT) {
-      return toast.error("maximum limit reached", {
-        duration: 2000,
-        position: "bottom-center",
-        style: { background: "white" }
-      })
-    }
-
     if (data) {
       if (isFavorite) {
         dispatch(removeFromFavorites(data));
       } else {
+        if (favorites?.length === MAX_FAVORITE_LIMIT) {
+          return toast.error("maximum limit reached", {
+            duration: 2000,
+            position: "bottom-center",
+            style: { background: "white" }
+          })
+        }
         dispatch(addToFavorites(data));
       }
     }
   };
 
   return (
-    <Link to={`/${name?.common}`}>
+    <Link to={`/country/${name?.common}`}>
       <div className="flex items-center justify-around space-x-8 rounded-lg border-white/40 p-2 bg-white/30 backdrop-blur-md shadow-md hover:shadow-lg">
-        <div className="w-1/3 shadow-md rounded-lg">
+        <div className="w-1/4 shadow-md rounded-lg">
           <img
             className="rounded-lg w-full h-auto sm:max-h-24 object-cover"
             src={flags?.svg}
@@ -51,7 +50,7 @@ const CountryCard = (countryCardProps?: CountryCardType) => {
         </div>
 
         <div className="font-mono">
-          <p className="font-semibold">{name?.common}</p>
+          <p>{name?.common}</p>
           <p>Capital: {countryCapital[0] || "N/A"}</p>
           <p>Region: {region || "N/A"}</p>
           <p>Language: {spokenLanguages[0] || "N/A"}</p>
