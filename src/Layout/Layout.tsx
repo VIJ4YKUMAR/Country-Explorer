@@ -23,11 +23,11 @@ const Layout = ({ children }: LayoutProps) => {
           className="flex items-center justify-between p-6 lg:px-8"
         >
           <div className="flex lg:flex-1 items-center gap-2">
-            <a href="#" className="-m-1.5 p-1.5">
+            <a href="/" className="flex items-center gap-2 -m-1.5 p-1.5">
               <span className="sr-only">Country Explorer</span>
               <img alt="" src={countryExplorer} className="h-8 w-auto" />
+              <p className="text-xl font-mono font-semibold">Country Explorer</p>
             </a>
-            <p className="text-xl font-mono font-semibold">Country Explorer</p>
           </div>
           <div className="flex lg:hidden">
             <button
